@@ -12,26 +12,28 @@ import {
     Cascader,
     Upload,
     Button,
-    Pagination
+    Pagination,
+    message
 } from 'antd';
 import objectAssign from 'object-assign';
+import Loading from '../components/Loading';
+import NoData from '../components/NoData';
+import Service from '../config/service';
+import config from '../config/config';
 const queryString = require('query-string');
 const Option = Select.Option;
 let Info = observer(class Info extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: '',
             total: 10
         }
         extendObservable(this, {
-            baseInfo: {
-                name: ''
-            },
-            list: [{}],
+            list: [],
             activePage: 1,
+            initLoading: true
         });
-        
+        this.reset();
     }
 
     render() {
@@ -42,81 +44,101 @@ let Info = observer(class Info extends Component {
                     <div className="review-filter">
                         <Form className="ant-row review-border review-head">
                             <Form layout="inline">
-                                <div className="ant-row ant-form-item" style={{width: 350}}>
+                                <div className="ant-row ant-form-item" style={{width: 250}}>
                                     <div className="ant-form-item-label">
-                                        <label for="select" class="" title="课程名称">课程名称</label>
+                                        <label for="select" >机构名称</label>
                                     </div>
-                                    {getFieldDecorator('personal_verification', {initialValue: ''})(
-                                        <Input type="uid" placeholder="请输入用户ID" style={{width: 250}}/>
+                                    {getFieldDecorator('corporateName', {initialValue: ''})(
+                                        <Input type="uid" placeholder="请输入机构名称" style={{width: 150}}/>
                                     )}
                                 </div>
                                 <div className="ant-row ant-form-item" style={{width: 250}}>
                                     <div className="ant-form-item-label">
-                                        <label for="select" class="" title="课程状态">课程状态</label>
+                                        <label for="select" >课程名称</label>
                                     </div>
-                                    {getFieldDecorator('business_verification', {initialValue:''})(
+                                    {getFieldDecorator('name', {initialValue: ''})(
+                                        <Input type="text" placeholder="请输入课程名称" style={{width: 150}}/>
+                                    )}
+                                </div>
+                                <div className="ant-row ant-form-item" style={{width: 250}}>
+                                    <div className="ant-form-item-label">
+                                        <label for="select" >课程状态</label>
+                                    </div>
+                                    {getFieldDecorator('state', {initialValue:''})(
                                         <Select id="select" size="large" initialValue="" style={{width: 150}}>
                                             <Option value="">不限</Option>
                                             <Option value="1">待提交</Option>
-                                            <Option value="2">已提交</Option>
-                                            <Option value="0">失败</Option>
+                                            <Option value="2">待审核</Option>
+                                            <Option value="4">待发布</Option>
+                                            <Option value="3">已上线</Option>
+                                            <Option value="5">已下线</Option>
                                         </Select>
                                     )}
                                 </div>
-                                <Button type="primary" onClick={() => {
-                                   
-                                }}>查 询</Button>
-                                <Button type="danger" className="fr" onClick={() => {
-                                    this.activePage = 1;
-                                }}>
-                                    <Icon type="plus" />
-                                    创建课程
-                                </Button>
+
+                                <Button type="primary" onClick={this.reset.bind(this)}>查 询</Button>
                             </Form>
                         </Form>
                     </div>
                     <div className="review-list-container">
                         <div className="review-table">
                             <div className="ant-row review-border review-head">
-                                <div className="ant-col-2">课程ID</div>
-                                <div className="ant-col-6">课程名称</div>
-                                <div className="ant-col-2">开始日期</div>
-                                <div className="ant-col-2">报名截止日期</div>
+                                <div className="ant-col-2">进件ID</div>
+                                <div className="ant-col-2">课程分类</div>
+                                <div className="ant-col-4">课程名称</div>
+                                <div className="ant-col-4">机构名称</div>
+                                <div className="ant-col-2">课程单价</div>
+                                <div className="ant-col-2">进件时间</div>
                                 <div className="ant-col-2">课程状态</div>
-                                <div className="ant-col-2">报名人数</div>
-                                <div className="ant-col-2 col-center">课程价格</div>
-                                <div className="ant-col-6 col-center">操作</div>
+                                <div className="ant-col-2">发起人</div>
+                                <div className="ant-col-4 col-center">操作</div>
                             </div>
-                            <div className="ant-row review-content review-border">
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-6 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-2 col-height">
-                                    <span>1001</span>
-                                </div>
-                                <div className="ant-col-6 col-height handle-branch-menu">
-                                    <Button type="ghost">提交审核</Button>
-                                    <Button type="ghost">下线</Button>
-                                    <Button type="ghost" onClick={() => {
-                                        this.props.history.push('/cms/course/info/1');    
-                                    }}>详情</Button>
-                                </div>
-                            </div>
+                            {!this.initLoading && this.list.map((val, key) => {
+                                return (
+                                    <div className="ant-row review-content review-border" key={key}>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.id}</span>
+                                        </div>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.categoryName}</span>
+                                        </div>
+                                        <div className="ant-col-4 col-height">
+                                            <span>{val.name}</span>
+                                        </div>
+                                        <div className="ant-col-4 col-height">
+                                            <span>{val.corporateName}</span>
+                                        </div>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.price}元 / {val.priceUnit}</span>
+                                        </div>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.cendDate}</span>
+                                        </div>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.stateLable}</span>
+                                        </div>
+                                        <div className="ant-col-2 col-height">
+                                            <span>{val.createUserName}</span>
+                                        </div>
+                                        <div className="ant-col-4 col-height handle-branch-menu">
+                                            {val.state == 3 && (
+                                                <Button type="ghost" onClick={this.updateState.bind(this, val, 5)}>下线</Button>
+                                            )}
+                                            {val.state == 5 && (
+                                                <Button type="ghost" onClick={this.updateState.bind(this, val, 3)}>上线</Button>
+                                            )}
+                                            {val.state != 4 && (
+                                                <Button type="ghost" className="ant-btn-red" onClick={this.updateState.bind(this, val, 4)}>拒绝</Button>
+                                            )}
+                                            <Button type="ghost" onClick={() => {
+                                                this.props.history.push(`/mis/course/info/${val.id}`);    
+                                            }}>详情</Button>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            <Loading show={this.initLoading} message={"加载中..."}/>
+                            <NoData show={!this.initLoading && !this.list.length}/>
                         </div>
                         {this.list.length > 0 && (
                             <Pagination
@@ -128,6 +150,7 @@ let Info = observer(class Info extends Component {
                                 defaultCurrent={this.activePage}
                                 onChange={(noop) => {
                                     this.activePage = noop;
+                                    this.getList();
                                 }}
                             />
                         )}
@@ -136,6 +159,55 @@ let Info = observer(class Info extends Component {
             </div>
         );
     }
+    reset() {
+        this.activePage = 1;
+        this.initLoading = true;
+        this.getList();
+    }
+    getList() {
+        this.initLoading = true;
+        let {name, state, corporateName} = this.props.form.getFieldsValue();
+        Service.getCourseList({
+            name,
+            state,
+            corporateName,
+            pageIndex: this.activePage,
+            pageSize: 10
+        }).then(res => {
+            if (res.rspCode == '0000000000') {
+                this.list = res.body.list.map(val => {
+                    val.stateLable = config.state[val.state]
+                    return val;
+                });
+                this.setState({
+                    total: parseInt(res.body.totalNum, 10)
+                });
+            }
+            else {
+                this.list = [];
+                this.setState({
+                    total: 0
+                });
+            }
+            this.initLoading = false;
+        });
+    }
+    updateState(val, state) {
+        Service.updateCourse({
+            id: val.id,
+            state
+        }).then(res => {
+            if (res.rspCode == '0000000000') {
+                val.state = state;
+                val.stateLable = config.state[state]
+                message.success('操作成功');
+            }
+            else {
+                message.error(res.rspMsg || '未知原因导致失败');
+            }
+        });
+    }
+
 });
 
 Info = Form.create()(Info);

@@ -52,13 +52,12 @@ function axiosHttp (type, url, params = {}, async, form) {
 
 
 export default {
-	getUserInfo: (params)=>{
-		// return axiosHttp('get', `${config.HOST}${config.USER_INFO}`, params);
-	},
 	login: (data)=> {
 		return axiosHttp('post', `${config.HOST}${config.LOGIN}`, data);
 	},
-
+	logout: (data) => {
+		return axiosHttp('post', `${config.HOST}${config.LOGOUT}`, data);
+	},
 	// 人员列表
 	getUserList: (params)=>{
 		return axiosHttp('post', `${config.HOST}${config.USER_LIST}`, params);
@@ -83,5 +82,59 @@ export default {
 	},
 	updateMerchantsInfo:  (params)=>{
 		return axiosHttp('post', `${config.HOST}${config.MERCHANTS_DETAIL_UPDATE}`, params);
+	},
+
+
+	// 课程信息
+	getCourseList: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COURSE_LIST}`, params);
+	},
+	getCourseDetail: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COURSE_DETAIL}`, params);
+	},
+	updateCourse: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COURSE_UPDATE}`, params);
+	},
+	addCourse: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COURSE_ADD}`, params);
+	},
+	
+	// 班级信息
+	getClassList: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.CLASS_LIST}`, params);
+	},
+	delClass:  (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.CLASS_DEL}`, params);
+	},
+	updateClass: (params)=>{
+		if (params.id) {
+			return axiosHttp('post', `${config.HOST}${config.CLASS_UPDATE}`, params);
+		}
+		return axiosHttp('post', `${config.HOST}${config.CLASS_ADD}`, params);
+	},
+
+	// 优惠券
+	getCouponList: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COUPON_LIST}`, params);
+	},
+	getCouponDetail: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COUPON_DETAIL}`, params);
+	},
+	updateCoupon: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COUPON_UPDATE}`, params);
+	},
+	addCoupon: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COUPON_ADD}`, params);
+	},
+	getCouponOper: (params)=>{
+		return axiosHttp('post', `${config.HOST}${config.COUPON_OPER_DETAIL}`, params);
+	},
+
+	// 品类
+	getCategory: (params) => {
+		return axiosHttp('post', `${config.HOST}${config.CATEGORY_LIST}`, params);
+	},
+	settleAmount: (params) => {
+		return axiosHttp('post', `${config.HOST}${config.SETTLE_AMOUNT}`, params);
 	},
 };

@@ -25,10 +25,12 @@ import Login from './pages/Login';
 // 各个场景信息
 import Page from './pages/Page';
 import Course from './pages/Course';
-// import CourseInfo from './pages/CourseInfo';
+import CourseInfo from './pages/CourseInfo';
 import User from './pages/User';
 import Merchants from './pages/Merchants';
 import MerchantsInfo from './pages/MerchantsInfo';
+import Coupon from './pages/Coupon';
+import CouponInfo from './pages/CouponInfo';
 // 个人配置
 import auth  from './config/auth';
 const HeaderWithRouter = withRouter(Header);
@@ -92,13 +94,21 @@ let App = observer(class App extends Component {
                                         <div className="app-content">
                                             <HeaderWithRouter/>
                                             <Switch>
-                                                <Route exact={true} path="/mis/merchants/list"   {...props} component={Merchants}/>
+                                                <Route exact={true} path="/mis/merchants"   {...props} component={Merchants}/>
                                                 <Route exact={true} path="/mis/merchants/info/:id"   {...props} component={MerchantsInfo}/>
-                                                <Route path="/mis/page" {...props} component={Page}/>
                                                 <Route exact={true} path="/mis/course" {...props} component={Course}/>
-                                                {/* <Route exact={true} path="/mis/course/info/:id" {...props} component={CourseInfo}/> */}
+                                                <Route exact={true} path="/mis/course/info/:id" {...props} component={CourseInfo}/>
+                                                <Route exact={true} path="/mis/coupon" {...props} component={Coupon}/>
+                                                {/* <Route exact={true} path="/mis/coupon/info/:id" {...props} component={CouponInfo}/> */}
+                                                <Route exact={true} path="/mis/coupon/add" render={(props)=>{
+                                                    return <CouponInfo {...props}   type="add"/>
+                                                }}/>
+                                                <Route exact={true} path="/mis/coupon/info/:id" render={(props)=>{
+                                                    return <CouponInfo {...props}   type="info"/>
+                                                }}/>
+
                                                 <Route path="/mis/user" {...props} component={User}/>
-                                                <Redirect to="/mis/merchants/list"/>
+                                                <Redirect to="/mis/merchants"/>
                                             </Switch>
                                             {/* <FooterNavWithRouter /> */}
                                         </div>

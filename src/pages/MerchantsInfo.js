@@ -232,7 +232,7 @@ export default observer(class MerchantsInfo extends Component {
                         <button className="input-btn input-btn-red"  onClick={this.handle.bind(this, 3)}>审核拒绝</button>
                     )}
                     <button className="input-btn input-btn-white" onClick={() => {
-                        this.props.history.push('/mis/merchants/list');
+                        this.props.history.push('/mis/merchants');
                     }}>返回</button>
                 </div>
             </div>

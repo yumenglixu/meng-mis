@@ -64,9 +64,20 @@
     overflow: hidden;
     position: relative;
     font-size: 0;
+    background-color: #f1f1f1;
 }
 .ant-upload-drag .img  img {
     width: 100%;
+    height: 100%;
+}
+.ant-upload-drag .img .img-container {
+    width: 100%;
+    height: 100%;
+    transition: opacity linear .15s;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;
+    background-size: auto 100%;
 }
 .ant-upload-drag .img .tag {
     display: inline-block;
@@ -143,4 +154,23 @@
 .ant-breadcrumb > span:last-child {
     color: #4a4a4a;
     font-weight: 700;
+}
+
+/*按钮*/
+.ant-btn-red {
+    border-color: #e4393c;
+    background-color: #e4393c;
+    color: #fff;
+}
+.ant-btn-red:hover {
+    border-color: #f04134;
+    background-color: #f04134;
+    color: #fff;
+}
+
+.ant-form-inline .ant-form-item {
+    margin-bottom: 10px;
+}
+.ant-form-inline .ant-form-item .ant-calendar-picker {
+    display: inline-block;
 }

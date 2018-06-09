@@ -53,7 +53,17 @@ a:link {
     transition: color .3s ease;
     color: #363f44;
 }
-
+input[type=file],
+.file {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000;
+    cursor: pointer;
+}
 a:focus,
 a:hover {
     color: #141719;
@@ -602,4 +612,51 @@ pre {
 
 .loading-view .msg {
     margin-top: 40px;
+}
+
+
+
+/*state-main*/
+.state-main {
+    width: 100%;
+    height: auto;
+    padding: 15px 0 25px 0;
+    text-align: center;
+    border-bottom: 1px solid #f2f2f2;
+}
+.state-main  span {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #19a9d5;
+}
+.state-main  span.state-4 {
+    color: #e4393c;
+}
+.state-main  span.state-5 {
+    color: #41b883;
+}
+.state-icon {
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60px;
+}
+.state-icon-1 {
+    background-image: url('../images/status/1.png');
+}
+.state-icon-2 {
+    background-image: url('../images/status/2.png');
+}
+.state-icon-3 {
+    background-image: url('../images/status/3.png');
+}
+.state-icon-4 {
+    background-image: url('../images/status/4.png');
+}
+.state-icon-5 {
+    background-image: url('../images/status/5.png');
 }

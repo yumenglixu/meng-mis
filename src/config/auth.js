@@ -57,7 +57,7 @@ export default {
 	},
 	// 是否授权
 	isAuthorized: ()=>{
-		if (Cookies.get('userId')) {
+		if (Cookies.get('sessionId')) {
 			UserObj.entity = true; 
 		}
 		return UserObj.entity ? true : false;

@@ -76,6 +76,7 @@ export default observer(class ShopDetail extends Component {
         }, this.loginType).then((res)=>{
             if (res.rspCode == '0000000000') {
                 Cookies.set('sessionId', res.body.sessionId, {expires: 7});
+                Cookies.set('userInfo', JSON.stringify(res.body), {expires: 7});
                 // 2s之后登录
                 let query = Qs.parse(this.props.location.search);
                 setTimeout(() => {
